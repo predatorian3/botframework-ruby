@@ -9,5 +9,5 @@ task default: :spec
 
 # Generate YARD documentation.
 YARD::Rake::YardocTask.new do |t|
-  t.files = ['lib/**/*.rb', 'README.md', 'Rakefile']
+  t.files = ['lib/**/*.rb', '-', 'README.md', 'Rakefile']
 end
