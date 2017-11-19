@@ -50,10 +50,13 @@ require 'bot_framework/dialogs/entity_recognizer'
 require 'bot_framework/dialogs/luis_recognizer'
 require 'bot_framework/dialogs/reg_exp_recognizer'
 
+# Microsoft's BotFramework RubyGem (Unofficial)
+#
+# Allows the use of the Microsoft BotFramework through Ruby.
 module BotFramework
   class << self
     # Used to store the connector object which holds the configuration for the
-    # BotFramework classes. 
+    # BotFramework classes.
     attr_accessor :connector
 
     # Configure calls the bot_framework/connector file to take in a user's block

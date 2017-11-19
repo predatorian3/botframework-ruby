@@ -1,9 +1,15 @@
 module BotFramework
   # Connector class
+  # Sets up and gets the OAuth token for Microsoft BotFramework and our bot to
+  # communicate together and receive and send activities.
   class Connector
-    # include HTTParty
-    # Accessor Attributes, also passed as options.
-    attr_accessor :app_id, :app_secret, :token
+    # Holds the App ID provided by the Bots Framework.
+    attr_accessor :app_id
+    # Holds the Registered Bot's secret for authenticating.
+    attr_accessor :app_secret
+    # Holds the Bot's resulting Token after authenticating.
+    attr_accessor :token
+    
     # Constants for BotFrame::Connector
     CONFIG_URI = 'https://api.aps.skype.com/v1/.well-known/openidconfiguration'.freeze
     REFRESH_ENDPOINT = 'https://login.microsoftonline.com/botframework.com/oauth2/v2.0/token'.freeze
@@ -19,17 +25,26 @@ module BotFramework
     ISSUER_DOMAINS = ['sts.windows.net', 'api.botframework.com', 'login.microsoftonline.com'].freeze
 
     # Initialize the BotFramework::Connector class.
+    #
     # The initialize method also calls for a yeild block to allow for usrs to
     # pass in extra options such as app_id, app_secret and token.
     #
     # @param [Hash] options
+    # @option options [String] :app_id
+    # @option options [String] :app_secret
     def initialize(options = {})
       @app_id = options[:app_id]
       @app_secret = options[:app_secret]
-      # Parse through our connector block. 
+      # Parse through our connector block.
       yield(self) if block_given?
     end
 
+    # Populates the attr_accessor :client
+    #
+    # Creates the client object by getting the OAuth tokens for the BotFramework
+    # so our bot can communicate and trust the BotFramework.
+    #
+    # @return [attr_accessor] :client
     def client
       OAuth2::Client.new(app_id, app_secret,
                          authorize_url: 'botframework.com/oauth2/v2.0/authorize',
@@ -37,13 +52,22 @@ module BotFramework
                          raise_errors: true,
                          site: 'https://login.microsoftonline.com')
     end
-
+    
+    #  Checks to see if our toekn is expired.
+    # If it is expired then we'll renew our token so BotFramework will trust us.
+    # Calls the get_token function if expired.
+    #
+    # @return [attr_accessor] :token
     def token
       @token = nil if @token && @token.expired?
       @token ||= get_token
       @token
     end
-
+    
+    # Calls the Class's attr_accessor :client and the client_credentials function
+    # to return the token for BotFramework.
+    #
+    # @return [String] token
     def get_token
       client.client_credentials.get_token(scope: 'https://api.botframework.com/.default', token_method: :post)
     end

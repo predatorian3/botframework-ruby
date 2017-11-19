@@ -8,3 +8,7 @@
 /spec/reports/
 /tmp/
 .vscode
+
+# Vim files
+*~
+*.sw[a-z0-9]

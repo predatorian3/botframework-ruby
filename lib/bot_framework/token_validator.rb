@@ -1,9 +1,11 @@
 require 'uri'
 
 module BotFramework
+  # Used to validate the tokens sent to us and we're sending to the BotFramework
   class TokenValidator
     include HTTParty
-    attr_accessor :headers, :errors
+    attr_accessor :headers
+    attr_accessor :errors
 
     def initialize(headers)
       @headers = headers
