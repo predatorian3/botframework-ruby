@@ -52,14 +52,21 @@ require 'bot_framework/dialogs/reg_exp_recognizer'
 
 module BotFramework
   class << self
+    # Used to store the connector object which holds the configuration for the
+    # BotFramework classes. 
     attr_accessor :connector
 
+    # Configure calls the bot_framework/connector file to take in a user's block
+    # and configure the BotFramework agent.
+    #
+    # @param [Hash] *args
+    # @param [Block] &block
     def configure(*args, &block)
       @connector = Connector.new(*args, &block)
     end
-    
+
     # Uses the Rails Logger or Ruby Logger in order depending on how the Library is called.
-    # Ruby Logger defaults to STDOUT unless defined otherwise. 
+    # Ruby Logger defaults to STDOUT unless defined otherwise.
     def logger
       @logger ||= defined?(Rails) ? Rails.logger : Logger.new(STDOUT)
     end

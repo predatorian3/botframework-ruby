@@ -2,7 +2,9 @@ module BotFramework
   # Connector class
   class Connector
     # include HTTParty
+    # Accessor Attributes, also passed as options.
     attr_accessor :app_id, :app_secret, :token
+    # Constants for BotFrame::Connector
     CONFIG_URI = 'https://api.aps.skype.com/v1/.well-known/openidconfiguration'.freeze
     REFRESH_ENDPOINT = 'https://login.microsoftonline.com/botframework.com/oauth2/v2.0/token'.freeze
     REFRESH_SCOPE = 'https://api.botframework.com/.default'.freeze
@@ -16,9 +18,15 @@ module BotFramework
     STATE_END_POINT = 'https://state'.freeze
     ISSUER_DOMAINS = ['sts.windows.net', 'api.botframework.com', 'login.microsoftonline.com'].freeze
 
+    # Initialize the BotFramework::Connector class.
+    # The initialize method also calls for a yeild block to allow for usrs to
+    # pass in extra options such as app_id, app_secret and token.
+    #
+    # @param [Hash] options
     def initialize(options = {})
       @app_id = options[:app_id]
       @app_secret = options[:app_secret]
+      # Parse through our connector block. 
       yield(self) if block_given?
     end
 
